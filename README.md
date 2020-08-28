@@ -1,2 +1,2 @@
 # nodejs-learning
-- Check corresponding dir for for README
+- Check corresponding dir for README

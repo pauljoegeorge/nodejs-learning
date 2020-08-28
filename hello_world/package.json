@@ -1,5 +1,10 @@
 {
   "scripts": {
-    "main": "node main.js"
+    "main:js": "node main.js",
+    "main:ts": "ts-node main.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   }
 }

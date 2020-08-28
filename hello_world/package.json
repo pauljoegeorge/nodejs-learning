@@ -1,7 +1,8 @@
 {
   "scripts": {
     "main:js": "node main.js",
-    "main:ts": "ts-node main.ts"
+    "main:ts": "ts-node main.ts",
+    "build:js": "tsc  main.ts --outFile dist/converted-main.js"
   },
   "devDependencies": {
     "ts-node": "^9.0.0",

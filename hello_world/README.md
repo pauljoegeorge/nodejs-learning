@@ -1,5 +1,8 @@
 # Hello World App
 
+## Goal:
+- https://github.com/pauljoegeorge/nodejs-learning/blob/master/hello_world/TASK.md
+
 ## Commands:
 > npm command to run main.js file
 ```

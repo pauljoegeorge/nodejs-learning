@@ -1,2 +1,4 @@
 nest-app/node_modules
 nest-app/dist/
+19-auth-jwt/node_modules/
+19-auth-jwt/dist/

@@ -1,7 +1,5 @@
 version: '3'
-
 services:
-
   nest-training-mysql-dev:
     image: mysql:5.7
     environment:

@@ -1,37 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { AuthRepository } from 'src/auth/auth.repository';
+import { strict } from 'assert';
+import { UpdateUsernameDto } from './dtos/update-username.dto';
 
 export type User = any;
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[];
+  constructor(
+    private readonly userRepository: AuthRepository,
+  ) {}
 
-  constructor() {
-    this.users = [
-      {
-        userId: 1,
-        username: 'john',
-        password: 'changeme',
-        email: 'john@test.com',
-      },
-      {
-        userId: 2,
-        username: 'chris',
-        password: 'secret',
-        email: 'chris@test.com',
-      },
-      {
-        userId: 3,
-        username: 'maria',
-        password: 'guess',
-        email: 'maria@test.com',
-      },
-    ];
-  }
 
-  async findOne(email: string): Promise<User | undefined> {
-    const user = this.users.find(user => user.email ===  email)
-    console.log(user);
-    return user;
+  async updateUserName(email: string, updateUsernameDto: UpdateUsernameDto){
+    const currentUser = await this.userRepository.findOne({ email });
+    if(currentUser){
+      const { username } = updateUsernameDto
+      currentUser.username =  username 
+      try{
+        await currentUser.save();
+        console.log(JSON.stringify(currentUser));
+        return {id: currentUser.id, username: currentUser.username, email: currentUser.email}
+      }
+      catch(error){
+        console.log(error.detail);
+      }
+    }
+    else{
+      throw new NotFoundException();
+    }
   }
 }

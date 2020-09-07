@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsString, MinLength, MaxLength, Matches } from "class-validator";
+import { IsNotEmpty, IsString, MinLength, MaxLength, Matches, IsOptional } from "class-validator";
 
 export class CreateUserDto {
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     @MinLength(5)
     @MaxLength(20)

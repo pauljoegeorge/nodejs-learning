@@ -1,5 +1,5 @@
 import { PrimaryGeneratedColumn, Column, Entity, BaseEntity, Unique, OneToMany } from "typeorm";
-import { IsNotEmpty, MinLength, MaxLength, Matches, IsString } from "class-validator";
+import { IsNotEmpty, MinLength, MaxLength, Matches, IsString, IsOptional } from "class-validator";
 import * as bcrypt from 'bcrypt';
 
 @Entity()
@@ -8,11 +8,7 @@ export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(4)
-    @MaxLength(20)
+    @Column({nullable: true})
     username: string;
 
     @Column()

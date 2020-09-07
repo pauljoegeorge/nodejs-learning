@@ -32,6 +32,7 @@ export class AuthRepository extends Repository<User>{
             if(error.code === "ER_DUP_ENTRY"){
                 throw new ConflictException(error.detail);
             }else{
+                console.log(error);
                 throw new InternalServerErrorException(error.detail);
             }
         }

@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayloadInterface } from "./jwt-payload.interface";
 
 @EntityRepository(User)
-export class UserRepository extends Repository<User>{
+export class AuthRepository extends Repository<User>{
     
     async createUser(createUserDto: CreateUserDto): Promise<JwtPayloadInterface> {
         const { username, email, password, password_confirmation } = createUserDto

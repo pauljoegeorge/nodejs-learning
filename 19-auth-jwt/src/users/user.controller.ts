@@ -1,7 +1,6 @@
-import { Controller, Post, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
-import { AuthRepository } from "src/auth/auth.repository";
 import { UpdateUsernameDto } from "./dtos/update-username.dto";
 
 @Controller('users')
@@ -10,6 +9,12 @@ export class UserController {
         private readonly userService: UsersService,
         private readonly updateUsernameDto: UpdateUsernameDto,
     ) {}
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/profile')
+    getProfile(@Req() req) {
+        return req.user;
+    }  
 
     @UseGuards(JwtAuthGuard)
     @Patch('/me')

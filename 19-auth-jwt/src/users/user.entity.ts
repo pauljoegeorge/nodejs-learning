@@ -3,15 +3,15 @@ import { IsNotEmpty, MinLength, MaxLength, Matches, IsString, IsOptional } from 
 import * as bcrypt from 'bcrypt';
 
 @Entity()
-@Unique(['username'])
+// @Unique(['email', 'username'])
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({nullable: true})
+    @Column({nullable: true, unique: true})
     username: string;
 
-    @Column()
+    @Column({unique: true})
     @IsString()
     @IsNotEmpty()
     email: string;

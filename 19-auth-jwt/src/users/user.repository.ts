@@ -1,12 +1,12 @@
 import { EntityRepository, Repository } from "typeorm";
 import { User } from "src/users/user.entity";
-import { CreateUserDto } from "./dtos/create-user.dto";
 import { BadRequestException, ConflictException, InternalServerErrorException } from "@nestjs/common";
 import * as bcrypt from 'bcrypt';
-import { JwtPayloadInterface } from "./jwt-payload.interface";
+import { CreateUserDto } from "src/auth/dtos/create-user.dto";
+import { JwtPayloadInterface } from "src/auth/jwt-payload.interface";
 
 @EntityRepository(User)
-export class AuthRepository extends Repository<User>{
+export class UserRepository extends Repository<User>{
     
     async createUser(createUserDto: CreateUserDto): Promise<JwtPayloadInterface> {
         const { username, email, password, password_confirmation } = createUserDto

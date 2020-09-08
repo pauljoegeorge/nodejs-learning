@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AuthRepository } from 'src/auth/auth.repository';
-import { strict } from 'assert';
 import { UpdateUsernameDto } from './dtos/update-username.dto';
+import { CreateUserDto } from 'src/auth/dtos/create-user.dto';
+import { UserRepository } from './user.repository';
+import { JwtPayloadInterface } from 'src/auth/jwt-payload.interface';
 
 export type User = any;
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly userRepository: AuthRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
 
@@ -29,5 +30,15 @@ export class UsersService {
     else{
       throw new NotFoundException();
     }
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<JwtPayloadInterface>{
+    const payload = await this.userRepository.createUser(createUserDto);
+    return payload
+  }
+
+  async findUserByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ email });
+    return user;
   }
 }

@@ -8,11 +8,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthRepository } from './auth.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AuthRepository]),
     UsersModule,
     PassportModule.register({defaultStrategy: 'jwt'}),
     JwtModule.register({

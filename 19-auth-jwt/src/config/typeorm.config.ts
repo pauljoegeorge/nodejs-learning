@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions }  from '@nestjs/typeorm';
 
-export const typeOrmConfig: TypeOrmModuleOptions = {
+const typeOrmConfig: TypeOrmModuleOptions = {
     type: 'mysql',
     host: 'localhost',
     port: 3308,
@@ -9,4 +9,10 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     database: 'nest_training_app',
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
+    migrations: ['src/migration/*.ts'],
+    cli: {
+        'migrationsDir': 'src/migration'
+    }
 }
+
+module.exports = typeOrmConfig

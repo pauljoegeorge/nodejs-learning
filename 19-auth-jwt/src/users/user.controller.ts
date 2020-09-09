@@ -1,7 +1,8 @@
-import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get } from "@nestjs/common";
-import { UsersService } from "./users.service";
+import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post } from "@nestjs/common";
+import { UsersService, User } from "./users.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { UpdateUsernameDto } from "./dtos/update-username.dto";
+import { SaveAddressDto } from "src/address/dtos/save-address-dto";
 
 @Controller('users')
 export class UserController {
@@ -12,8 +13,8 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/profile')
-    getProfile(@Req() req) {
-        return req.user;
+    getProfile(@Req() req): Promise<User> {
+        return this.userService.getUserInfo(req.user.email);
     }  
 
     @UseGuards(JwtAuthGuard)
@@ -24,5 +25,15 @@ export class UserController {
         @Body() updateUsernameDto: UpdateUsernameDto,
     ): Promise<{}>{
         return this.userService.updateUserName(req.user.email, updateUsernameDto);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/address')
+    @UsePipes(ValidationPipe)
+    saveAddress(
+        @Req() req,
+        @Body() saveAddressDto: SaveAddressDto,
+    ): Promise<{}>{
+        return this.userService.saveAddress(req.user.email, saveAddressDto);
     }
 }

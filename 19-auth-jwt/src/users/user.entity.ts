@@ -22,20 +22,16 @@ export class User extends BaseEntity {
     @IsString()
     @MinLength(6)
     @MaxLength(20)
-    @Exclude({ toPlainOnly: true })
+    @Exclude()
     password: string;
 
     @Column()
     @IsString()
-    @Exclude({ toPlainOnly: true })
+    @Exclude()
     password_salt: string;
 
     @OneToMany(type => Address, address => address.user, {eager: true})
     addresses: Address[];
-
-    toJSON() {
-        return classToPlain(this);
-      }
       
     async validPassword(password: string): Promise<boolean>{
         const hashed_password = await bcrypt.hash(password, this.password_salt);

@@ -1,4 +1,4 @@
-import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post, Param, ParseIntPipe } from "@nestjs/common";
+import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post, Param, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor } from "@nestjs/common";
 import { UsersService, User } from "./users.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { UpdateUsernameDto } from "./dtos/update-username.dto";
@@ -12,6 +12,7 @@ export class UserController {
         private readonly updateUsernameDto: UpdateUsernameDto,
     ) {}
 
+    @UseInterceptors(ClassSerializerInterceptor)
     @UseGuards(JwtAuthGuard)
     @Get('/profile')
     getProfile(@Req() req): Promise<User> {

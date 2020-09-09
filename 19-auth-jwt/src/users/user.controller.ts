@@ -1,8 +1,9 @@
-import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post } from "@nestjs/common";
+import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post, Param, ParseIntPipe } from "@nestjs/common";
 import { UsersService, User } from "./users.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { UpdateUsernameDto } from "./dtos/update-username.dto";
 import { SaveAddressDto } from "src/address/dtos/save-address-dto";
+import { Address } from "src/address/address.entity";
 
 @Controller('users')
 export class UserController {
@@ -28,12 +29,35 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Post('/address')
+    @Post('/:id/address')
     @UsePipes(ValidationPipe)
     saveAddress(
         @Req() req,
         @Body() saveAddressDto: SaveAddressDto,
+        @Param('id', ParseIntPipe) userId: number, 
     ): Promise<{}>{
-        return this.userService.saveAddress(req.user.email, saveAddressDto);
+        return this.userService.saveAddress(req.user.email, userId, saveAddressDto);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/:id/address')
+    @UsePipes(ValidationPipe)
+    getAddreesses(
+        @Req() req,
+        @Param('id', ParseIntPipe) userId: number, 
+    ): Promise<Address[]>{
+        return this.userService.getAddresses(req.user.email, userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/:id/address/:addressId')
+    @UsePipes(ValidationPipe)
+    getAddreessById(
+        @Req() req,
+        @Param('id', ParseIntPipe) userId: number,
+        @Param('addressId', ParseIntPipe) addressId: number, 
+    ): Promise<Address>{
+        return this.userService.getAddressById(req.user.email, userId, addressId);
+    }
+
 }

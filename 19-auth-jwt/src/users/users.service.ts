@@ -44,9 +44,9 @@ export class UsersService {
     return user;
   }
 
-  async saveAddress(email, saveAddressDto): Promise<{}>{
+  async saveAddress(email: string, userId: number, saveAddressDto: SaveAddressDto): Promise<{}>{
     const user = await this.userRepository.findOne({ email });
-    if(user){
+    if(user && user.id === userId){
       return await this.saveAddressToDb(user.id, saveAddressDto);
     }else{
       throw new NotFoundException();
@@ -56,9 +56,25 @@ export class UsersService {
   async getUserInfo(email: string): Promise<User>{
     const user = await this.findUserByEmail(email);
     if(!user){
+      // confuse user
       throw new NotFoundException()
     }else{
       return user;
+    }
+  }
+
+  async getAddresses(email:string, paramUserId: number): Promise<Address[]>{
+    const user = await this.getUserInfo(email)
+    if(this.allowedUser(paramUserId, user.id)){
+      return user.addresses;
+    }
+  }
+
+
+  async getAddressById(email:string, paramUserId: number, addressId: number): Promise<Address>{
+    const currentUser = await this.getUserInfo(email)
+    if(this.allowedUser(paramUserId, currentUser.id)){
+      return currentUser.addresses.filter(address => address.id === addressId)
     }
   }
 
@@ -76,6 +92,16 @@ export class UsersService {
     }
     catch(error){
       throw new BadRequestException(error);
+    }
+  }
+
+  private allowedUser(paramUserId: number, tokenUserId: number): boolean {
+    if(paramUserId === tokenUserId){
+      return true
+    }
+    else{
+      // confuse user
+      throw new NotFoundException();
     }
   }
 }

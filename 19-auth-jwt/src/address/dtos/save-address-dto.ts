@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MinLength, MaxLength, IsNumber, IsIn, IsNumberString, Matches } from "class-validator";
+import { IsNotEmpty, IsString, MinLength, MaxLength, IsNumber, IsIn, IsNumberString, Matches, IsEnum } from "class-validator";
 import { In } from "typeorm";
 import { Address } from "../address.entity";
 import { AddressType } from "../address-type.enum";
@@ -7,8 +7,9 @@ export class SaveAddressDto {
 
     @IsString()
     @IsNotEmpty()
-    @IsIn([AddressType.HOME, AddressType.OFFICE])
-    type: string;
+    // @IsIn([AddressType.HOME, AddressType.OFFICE])
+    @IsEnum(AddressType, {message: "Wrong address type"})
+    type: AddressType;
 
     @IsString()
     @IsNotEmpty()

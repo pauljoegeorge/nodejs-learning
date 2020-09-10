@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { IsNotEmpty, IsString, MinLength, MaxLength } from "class-validator";
 import { User } from "src/users/user.entity";
 
@@ -10,7 +10,6 @@ export class Address extends BaseEntity {
     @Column({nullable: true, unique: true})
     type: string;
 
-    @Column({unique: true})
     @IsString()
     @IsNotEmpty()
     street: string;
@@ -24,9 +23,11 @@ export class Address extends BaseEntity {
     @Column()
     zipCode: number;
 
-    @Column()
-    userId: number;
+    // @Column()
+    // userId: number;
 
+    //Adding custom foreign key name
     @ManyToOne(type => User, user => user.addresses, {eager: false})
-    user: User;
+    @JoinColumn([{name:  "testUserId2", referencedColumnName: "id"}])
+    testUserId2: number;
 }

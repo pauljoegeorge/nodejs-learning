@@ -85,7 +85,8 @@ export class UsersService {
     address.street = street
     address.city = city
     address.zipCode = zipCode
-    address.userId = user_id
+    // address.userId = user_id
+    address.testUserId2 = user_id
     try{
       await address.save();
       return address

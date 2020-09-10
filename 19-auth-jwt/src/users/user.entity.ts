@@ -30,7 +30,7 @@ export class User extends BaseEntity {
     @Exclude()
     password_salt: string;
 
-    @OneToMany(type => Address, address => address.user, {eager: true})
+    @OneToMany(type => Address, address => address.testUserId2, {eager: true})
     addresses: Address[];
       
     async validPassword(password: string): Promise<boolean>{

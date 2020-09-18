@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { JsLogger, Mylogger } from './js-logger/js-logger.service';
+import { Injectable, Inject } from '@nestjs/common';
+import { JsLogger } from './js-logger/js-logger.service';
+import { REQUEST } from '@nestjs/core';
 
 @Injectable()
 export class AppService {
   constructor(
-    private logger: JsLogger
+    private logger: JsLogger,
+    @Inject(REQUEST) private request,
   ){
     this.logger.setContext(AppService.name)
+    this.logger.setRequestId(this.request.headers.requestid);
   }
 
   getHello(): string {

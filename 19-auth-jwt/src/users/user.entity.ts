@@ -3,6 +3,7 @@ import { IsNotEmpty, MinLength, MaxLength, Matches, IsString, IsOptional } from 
 import * as bcrypt from 'bcrypt';
 import { Address } from "src/address/address.entity";
 import { Exclude, classToPlain } from 'class-transformer';
+import { UserTypeEnum } from "./user-type.enum";
 
 @Entity()
 // @Unique(['email', 'username'])
@@ -12,6 +13,10 @@ export class User extends BaseEntity {
 
     @Column({nullable: true, unique: true})
     username: string;
+
+    @Column({nullable: false})
+    userType: UserTypeEnum;
+
 
     @Column({unique: true})
     @IsString()

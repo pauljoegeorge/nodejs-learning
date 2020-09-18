@@ -9,7 +9,7 @@ import { JwtPayloadInterface } from "src/auth/jwt-payload.interface";
 export class UserRepository extends Repository<User>{
     
     async createUser(createUserDto: CreateUserDto): Promise<JwtPayloadInterface> {
-        const { username, email, password, password_confirmation } = createUserDto
+        const { username, userType, email, password, password_confirmation } = createUserDto
         
         // throw exception if not matching
         if(password !== password_confirmation){
@@ -18,6 +18,7 @@ export class UserRepository extends Repository<User>{
         
         // register new user
         const user = new User();
+        user.userType = userType;
         user.username = username;
         user.email = email;
         user.password_salt = await bcrypt.genSalt(); // generate password salt

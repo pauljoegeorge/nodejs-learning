@@ -8,3 +8,7 @@
 
 ### Date 11/11/20
 ![Task- Logger](https://github.com/pauljoegeorge/nodejs-learning/blob/master/19-auth-jwt/images/logging.png)
+
+
+### Date 15/11/20 - Logger Advanced
+![Logger Advanced](https://github.com/pauljoegeorge/nodejs-learning/blob/master/19-auth-jwt/images/logger-advanced.png)

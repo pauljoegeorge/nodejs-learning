@@ -1,7 +1,5 @@
 import { Injectable, Logger, Scope, LoggerService, Optional } from '@nestjs/common';
-import { LoggerMiddleware } from './js-logger.middleware';
 const { createLogger, format, transports} = require('winston');
-const { combine, timestamp, label, printf } = format;
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class JsLogger extends Logger {

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MinLength, MaxLength, Matches, IsOptional, isNotEmpty, isEnum, IsEnum } from "class-validator";
+import { IsNotEmpty, IsString, MinLength, MaxLength, Matches, IsOptional, isNotEmpty, isEnum, IsEnum, IsEmail } from "class-validator";
 import { UserTypeEnum } from "src/users/user-type.enum";
 
 export class CreateUserDto {
@@ -11,16 +11,17 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
-    @IsEnum(UserTypeEnum, {message: "wrong userType input"})
+    @IsEnum(UserTypeEnum, {message: "userType: wrong input"})
     userType: UserTypeEnum;
 
     @IsNotEmpty()
     @IsString()
     @MinLength(8)
-    @Matches(
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+.([a-zA-Z0-9-]+)*$/,
-        {message: "Invalid email"},
-    )
+    @IsEmail()
+    // @Matches(
+    //     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+.([a-zA-Z0-9-]+)*$/,
+    //     {message: "Invalid email"},
+    // )
     email: string;
 
     @IsNotEmpty()

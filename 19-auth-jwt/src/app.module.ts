@@ -8,6 +8,7 @@ import { AddressModule } from './address/address.module';
 import * as typeOrmConfig from './config/typeorm.config';
 import { LoggerModule } from './js-logger/js-logger.module';
 import { LoggerMiddleware } from './js-logger/js-logger.middleware';
+import { JsLogger } from './js-logger/js-logger.service';
 
 @Module({
   imports: [AuthModule, TypeOrmModule.forRoot(typeOrmConfig), UsersModule, AddressModule, LoggerModule],

@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { UpdateUsernameDto } from './dtos/update-username.dto';
 import { CreateUserDto } from 'src/auth/dtos/create-user.dto';
 import { UserRepository } from './user.repository';
 import { JwtPayloadInterface } from 'src/auth/jwt-payload.interface';
-import { Address } from 'src/address/address.entity';
+import { Address } from '../address/address.entity';
 import { SaveAddressDto } from 'src/address/dtos/save-address-dto';
+import { AddressService } from '../address/address.service';
 
 export type User = any;
 
@@ -12,6 +13,7 @@ export type User = any;
 export class UsersService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly addressService: AddressService,
   ) {}
 
 
@@ -50,6 +52,19 @@ export class UsersService {
       return await this.saveAddressToDb(user.id, saveAddressDto);
     }else{
       throw new NotFoundException();
+    }
+  }
+
+  async deleteAddress(email: string, userId: number, addressId: number): Promise<void>{
+    const user = await this.findUserByEmail(email);
+    if(this.allowedUser(userId, user.id)){
+      const address = await this.addressService.findAddressById(addressId);
+      if(address){
+        await this.addressService.deleteAddressById(addressId, user.id);
+      }
+    }
+    else{
+      throw new UnauthorizedException();
     }
   }
 

@@ -1,7 +1,7 @@
 import { PrimaryGeneratedColumn, Column, Entity, BaseEntity, Unique, OneToMany, Exclusion } from "typeorm";
 import { IsNotEmpty, MinLength, MaxLength, Matches, IsString, IsOptional } from "class-validator";
 import * as bcrypt from 'bcrypt';
-import { Address } from "src/address/address.entity";
+import { Address } from "../address/address.entity";
 import { Exclude, classToPlain } from 'class-transformer';
 import { UserTypeEnum } from "./user-type.enum";
 

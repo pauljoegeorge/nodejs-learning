@@ -1,9 +1,9 @@
-import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post, Param, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor } from "@nestjs/common";
+import { Controller, Patch, Req, UseGuards, Body, UsePipes, ValidationPipe, Get, Post, Param, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor, Delete } from "@nestjs/common";
 import { UsersService, User } from "./users.service";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { UpdateUsernameDto } from "./dtos/update-username.dto";
-import { SaveAddressDto } from "src/address/dtos/save-address-dto";
-import { Address } from "src/address/address.entity";
+import { SaveAddressDto } from "../address/dtos/save-address-dto";
+import { Address } from "../address/address.entity";
 
 @Controller('users')
 export class UserController {
@@ -61,4 +61,14 @@ export class UserController {
         return this.userService.getAddressById(req.user.email, userId, addressId);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Delete('/:id/address/:addressId')
+    @UsePipes(ValidationPipe)
+    deleteAddress(
+        @Req() req,
+        @Param('id', ParseIntPipe) userId: number,
+        @Param('addressId', ParseIntPipe) addressId: number, 
+    ): Promise<void>{
+        return this.userService.deleteAddress(req.user.email, userId, addressId);
+    }
 }

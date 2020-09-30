@@ -1,9 +1,9 @@
 import { EntityRepository, Repository } from "typeorm";
-import { User } from "src/users/user.entity";
+import { User } from "../users/user.entity";
 import { BadRequestException, ConflictException, InternalServerErrorException } from "@nestjs/common";
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from "src/auth/dtos/create-user.dto";
-import { JwtPayloadInterface } from "src/auth/jwt-payload.interface";
+import { CreateUserDto } from "../auth/dtos/create-user.dto";
+import { JwtPayloadInterface } from "../auth/jwt-payload.interface";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User>{

@@ -1,23 +1,18 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { IsNotEmpty, IsString, MinLength, MaxLength } from "class-validator";
-import { User } from "src/users/user.entity";
+import { User } from "../users/user.entity";
 
 @Entity()
 export class Address extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({nullable: true, unique: true})
+    @Column({nullable: true})
     type: string;
 
-    @IsString()
-    @IsNotEmpty()
     street: string;
 
     @Column()
-    @IsString()
-    @MinLength(6)
-    @MaxLength(20)
     city: string;
 
     @Column()

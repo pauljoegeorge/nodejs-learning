@@ -4,6 +4,8 @@ import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { UpdateUsernameDto } from "./dtos/update-username.dto";
 import { SaveAddressDto } from "../address/dtos/save-address-dto";
 import { Address } from "../address/address.entity";
+import { Authentication } from "./guards/authentication.guard";
+import { AuthencationPipe } from "./pipes/authentication.pipe";
 
 @Controller('users')
 export class UserController {
@@ -15,7 +17,9 @@ export class UserController {
     @UseInterceptors(ClassSerializerInterceptor)
     @UseGuards(JwtAuthGuard)
     @Get('/profile')
-    getProfile(@Req() req): Promise<User> {
+    getProfile(
+        @Req() req,
+    ): Promise<User> {
         return this.userService.getUserInfo(req.user.email);
     }  
 
@@ -44,6 +48,7 @@ export class UserController {
     @Get('/:id/address')
     @UsePipes(ValidationPipe)
     getAddreesses(
+        @Authentication(AuthencationPipe)
         @Req() req,
         @Param('id', ParseIntPipe) userId: number, 
     ): Promise<Address[]>{
@@ -54,6 +59,7 @@ export class UserController {
     @Get('/:id/address/:addressId')
     @UsePipes(ValidationPipe)
     getAddreessById(
+        @Authentication(AuthencationPipe)
         @Req() req,
         @Param('id', ParseIntPipe) userId: number,
         @Param('addressId', ParseIntPipe) addressId: number, 
@@ -65,6 +71,7 @@ export class UserController {
     @Delete('/:id/address/:addressId')
     @UsePipes(ValidationPipe)
     deleteAddress(
+        @Authentication(AuthencationPipe)
         @Req() req,
         @Param('id', ParseIntPipe) userId: number,
         @Param('addressId', ParseIntPipe) addressId: number, 

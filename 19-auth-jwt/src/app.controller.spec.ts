@@ -15,14 +15,17 @@ const mockLogger = () => ({
 describe('AppController', () => {
     let appService;
     let jsLogger;
+    let appController;
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
+            controllers: [AppController],
             providers: [
                 {provide: AppService, useFactory: mockService},
                 {provide: JsLogger, useFactory: mockLogger},
             ]
         }).compile();
+        appController = await module.get<AppController>(AppController);
         appService = await module.get<AppService>(AppService);
         jsLogger = await module.get<JsLogger>(JsLogger);
     });

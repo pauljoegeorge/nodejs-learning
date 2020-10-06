@@ -10,6 +10,7 @@ export class Address extends BaseEntity {
     @Column({nullable: true})
     type: string;
 
+    @Column()
     street: string;
 
     @Column()

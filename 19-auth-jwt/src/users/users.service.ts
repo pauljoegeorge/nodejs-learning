@@ -6,6 +6,7 @@ import { JwtPayloadInterface } from 'src/auth/jwt-payload.interface';
 import { Address } from '../address/address.entity';
 import { SaveAddressDto } from 'src/address/dtos/save-address-dto';
 import { AddressService } from '../address/address.service';
+import { add } from 'winston';
 
 export type User = any;
 
@@ -23,8 +24,8 @@ export class UsersService {
       const { username } = updateUsernameDto
       currentUser.username =  username 
       try{
-        await currentUser.save();
-        console.log(JSON.stringify(currentUser));
+        await this.userRepository.save(currentUser);
+        //  currentUser.save();
         return {id: currentUser.id, username: currentUser.username, email: currentUser.email, address: currentUser.addresses}
       }
       catch(error){
@@ -46,26 +47,22 @@ export class UsersService {
     return user;
   }
 
-  async saveAddress(email: string, userId: number, saveAddressDto: SaveAddressDto): Promise<{}>{
+  async saveAddress(email: string, userId: number, saveAddressDto: SaveAddressDto): Promise<any>{
     const user = await this.userRepository.findOne({ email });
     if(user && user.id === userId){
       return await this.saveAddressToDb(user.id, saveAddressDto);
     }else{
-      throw new NotFoundException();
+      throw new UnauthorizedException();
     }
   }
 
   async deleteAddress(email: string, userId: number, addressId: number): Promise<void>{
     const user = await this.findUserByEmail(email);
-    if(this.allowedUser(userId, user.id)){
-      const address = await this.addressService.findAddressById(addressId);
-      if(address){
-        await this.addressService.deleteAddressById(addressId, user.id);
-      }
-    }
-    else{
+    const address = await this.addressService.findAddressById(addressId);
+    if(!address){
       throw new UnauthorizedException();
     }
+    await this.addressService.deleteAddressById(addressId, user.id);
   }
 
   async getUserInfo(email: string): Promise<User>{
@@ -80,22 +77,22 @@ export class UsersService {
 
   async getAddresses(email:string, paramUserId: number): Promise<Address[]>{
     const user = await this.getUserInfo(email)
-    if(this.allowedUser(paramUserId, user.id)){
       return user.addresses;
-    }
   }
 
 
   async getAddressById(email:string, paramUserId: number, addressId: number): Promise<Address>{
     const currentUser = await this.getUserInfo(email)
-    if(this.allowedUser(paramUserId, currentUser.id)){
-      return currentUser.addresses.filter(address => address.id === addressId)
+    const address = currentUser.addresses.filter(address => address.id === addressId)
+    if(address.length === 0){
+      throw new UnauthorizedException();
     }
+    return address;
   }
 
   private async  saveAddressToDb(user_id: number, saveAddressDto: SaveAddressDto): Promise<{}>{
     const { type, street, city, zipCode } = saveAddressDto;
-    const address = new Address()
+    const address = Address.create()
     address.type = type
     address.street = street
     address.city = city
@@ -108,16 +105,6 @@ export class UsersService {
     }
     catch(error){
       throw new BadRequestException(error);
-    }
-  }
-
-  private allowedUser(paramUserId: number, tokenUserId: number): boolean {
-    if(paramUserId === tokenUserId){
-      return true
-    }
-    else{
-      // confuse user
-      throw new NotFoundException();
     }
   }
 }
